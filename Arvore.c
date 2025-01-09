@@ -70,6 +70,31 @@ no_arv* insere_3(no_arv *raiz, int valor) {
     return raiz; // Retorna a raiz da subárvore
 }
 
+void insere_4(no_arv **raiz, int num) {
+    no_arv **aux = raiz; // Ponteiro para ponteiro, inicializado com o endereço da raiz
+
+    // Percorre a árvore até encontrar um ponto vazio
+    while (*aux) {
+        if (num < (*aux)->valor) {
+            aux = &(*aux)->esq; // Atualiza para a subárvore esquerda
+        } else {
+            aux = &(*aux)->dir; // Atualiza para a subárvore direita
+        }
+    }
+
+    // Aloca memória para o novo nó
+    *aux = malloc(sizeof(no_arv));
+    if (*aux == NULL) { // Verifica se a alocação foi bem-sucedida
+        fprintf(stderr, "Erro de alocação de memória\n");
+        exit(EXIT_FAILURE);
+    }
+
+    // Inicializa o novo nó
+    (*aux)->valor = num;
+    (*aux)->esq = NULL;
+    (*aux)->dir = NULL;
+}
+
 /**
  * Imprime os valores da rvore em pre-ordem, ou seja, a raiz,
  * seguida dos valores da esquerda e da direita.
