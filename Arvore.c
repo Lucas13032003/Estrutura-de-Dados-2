@@ -31,6 +31,44 @@ no_arv* insere_1(no_arv* raiz, int valor) {
         return raiz;
     }
 }
+void insere_2(no_arv **raiz, int valor) {
+    if (*raiz == NULL) {
+        *raiz = malloc(sizeof(no_arv));
+        if (*raiz == NULL) {
+            fprintf(stderr, "Erro de alocação de memória\n");
+            exit(EXIT_FAILURE);
+        }
+        (*raiz)->valor = valor;
+        (*raiz)->esq = NULL;
+        (*raiz)->dir = NULL;
+    } else {
+        if (valor < (*raiz)->valor) {
+            insere_2(&((*raiz)->esq), valor);
+        } else {
+            insere_2(&((*raiz)->dir), valor);
+        }
+    }
+}
+
+no_arv* insere_3(no_arv *raiz, int valor) {
+    if (raiz == NULL) { // Verifica se o nó atual é NULL
+        no_arv *aux = malloc(sizeof(no_arv)); // Aloca memória para o novo nó
+        if (aux == NULL) { // Verifica se a alocação foi bem-sucedida
+            fprintf(stderr, "Erro de alocação de memória\n");
+            exit(EXIT_FAILURE);
+        }
+        aux->esq = aux->dir = NULL; // Inicializa os ponteiros do nó
+        aux->dado = valor; // Atribui o valor ao nó
+        return aux; // Retorna o novo nó
+    }
+
+    if (valor < raiz->dado) { // Valor menor, insere na subárvore esquerda
+        raiz->esq = insere_3(raiz->esq, valor);
+    } else if (valor > raiz->dado) { // Valor maior, insere na subárvore direita
+        raiz->dir = insere_3(raiz->dir, valor);
+    }
+    return raiz; // Retorna a raiz da subárvore
+}
 
 /**
  * Imprime os valores da rvore em pre-ordem, ou seja, a raiz,
@@ -107,7 +145,8 @@ int main() {
         case 1:
             printf("\n Digite um valor: ");
             scanf("%d", &valor);
-            raiz = insere_1(raiz, valor);
+            //raiz = insere_1(raiz, valor);
+            insere_2(&raiz, valor);
             break;
         case 2:
             printf("\n Primeira impressao (pre-ordem): \n");
