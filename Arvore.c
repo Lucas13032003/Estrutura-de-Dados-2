@@ -58,13 +58,13 @@ no_arv* insere_3(no_arv *raiz, int valor) {
             exit(EXIT_FAILURE);
         }
         aux->esq = aux->dir = NULL; // Inicializa os ponteiros do nó
-        aux->dado = valor; // Atribui o valor ao nó
+        aux->valor = valor; // Atribui o valor ao nó
         return aux; // Retorna o novo nó
     }
 
-    if (valor < raiz->dado) { // Valor menor, insere na subárvore esquerda
+    if (valor < raiz->valor) { // Valor menor, insere na subárvore esquerda
         raiz->esq = insere_3(raiz->esq, valor);
-    } else if (valor > raiz->dado) { // Valor maior, insere na subárvore direita
+    } else if (valor > raiz->valor) { // Valor maior, insere na subárvore direita
         raiz->dir = insere_3(raiz->dir, valor);
     }
     return raiz; // Retorna a raiz da subárvore
@@ -134,7 +134,7 @@ void imprime_3(no_arv* raiz) {
 }
 
 /**
- * Retorna a altura da rvore binaria, considerando o nivel da raiz
+ * Retorna a altura da arvore binaria, considerando o nivel da raiz
  * como 1. Se arvore estiver vazia, retorna 0.
  * @param raiz a raiz da rvore
  **/
@@ -145,6 +145,35 @@ int altura(no_arv* raiz) {
     int altura_esq = altura(raiz->esq);
     int altura_dir = altura(raiz->dir);
     return 1 + (altura_esq > altura_dir ? altura_esq : altura_dir);
+}
+no_arv* busca(no_arv* raiz, int valor) {
+    while (raiz != NULL)
+    {
+        if (valor < raiz->valor)
+        {
+            raiz = raiz->esq;
+        }
+        else if (valor > raiz->valor)
+        {
+            raiz = raiz->dir;
+        }
+        else return raiz;
+    }
+    return NULL;
+}
+no_arv* busca_2(no_arv* raiz, int valor) {
+    if(raiz){
+        if(valor == raiz->valor){
+            return raiz;
+        }
+        else if (valor < raiz->valor){
+            return busca_2(raiz->esq, valor);
+        }
+        else{
+            return busca_2(raiz->dir, valor);
+        }
+    }
+    return NULL;    
 }
 
 /**
@@ -162,33 +191,42 @@ int main() {
     int opcao = -1, valor;
 
     do {
-        printf("\n1 - Inserir\n2 - Imprimir\n3 - Altura\n0 - Sair\n");
+        printf("\n1 - Inserir\n2 - Imprimir\n3 - Altura\n4 - Buscar\n0 - Sair\n");
         printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
 
         switch (opcao) {
         case 1:
-            printf("\n Digite um valor: ");
+            printf("\nDigite um valor: ");
             scanf("%d", &valor);
-            //raiz = insere_1(raiz, valor);
             insere_2(&raiz, valor);
             break;
         case 2:
-            printf("\n Primeira impressao (pre-ordem): \n");
+            printf("\nPrimeira impressao (pre-ordem): \n");
             imprime_1(raiz);
-            printf("\n Segunda impressao (em ordem): \n");
+            printf("\nSegunda impressao (em ordem): \n");
             imprime_2(raiz);
-            printf("\n Terceira impressao (pos-ordem): \n");
+            printf("\nTerceira impressao (pos-ordem): \n");
             imprime_3(raiz);
             break;
         case 3:
-            printf("\n Altura da arvore: %d\n", altura(raiz));
+            printf("\nAltura da arvore: %d\n", altura(raiz));
+            break;
+        case 4:
+            printf("\nDigite o valor a ser buscado: ");
+            scanf("%d", &valor);
+            no_arv* resultado = busca(raiz, valor);
+            if (resultado != NULL) {
+                printf("Valor %d encontrado na arvore.\n", resultado->valor);
+            } else {
+                printf("Valor %d nao encontrado na arvore.\n", valor);
+            }
             break;
         case 0:
-            printf("\n Saindo...\n");
+            printf("\nSaindo...\n");
             break;
         default:
-            printf("\n Opcao invalida!\n");
+            printf("\nOpcao invalida!\n");
             break;
         }
     } while (opcao != 0);
