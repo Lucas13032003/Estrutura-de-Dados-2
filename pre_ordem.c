@@ -70,4 +70,3 @@ no* cria_no(int dado) {
     return novo;
 }
 
-
